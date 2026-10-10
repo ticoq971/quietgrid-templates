@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ticoq971.github.io/quietgrid-templates/sitemap.xml
