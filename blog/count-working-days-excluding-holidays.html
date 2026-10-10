@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to count working days between two dates, excluding holidays (Excel &amp; Google Sheets) | Quietgrid</title><meta name="description" content="Use NETWORKDAYS and NETWORKDAYS.INTL to count business days between two dates, excluding weekends and public holidays. Includes examples, half days, return dates and common mistakes."><link rel="canonical" href="https://ticoq971.github.io/quietgrid-templates/blog/count-working-days-excluding-holidays.html">
+<meta property="og:title" content="How to count working days between two dates, excluding holidays (Excel &amp; Google Sheets) | Quietgrid"><meta property="og:description" content="Use NETWORKDAYS and NETWORKDAYS.INTL to count business days between two dates, excluding weekends and public holidays. Includes examples, half days, return dates and common mistakes."><meta property="og:image" content="https://ticoq971.github.io/quietgrid-templates/assets/img/pto-01-cover.jpg">
+<meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image"><link rel="stylesheet" href="../assets/style.css"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "How to count working days between two dates, excluding holidays (Excel & Google Sheets)", "description": "Use NETWORKDAYS and NETWORKDAYS.INTL to count business days between two dates, excluding weekends and public holidays. Includes examples, half days, return dates and common mistakes.", "datePublished": "2026-10-10", "author": {"@type": "Organization", "name": "Quietgrid"}, "publisher": {"@type": "Organization", "name": "Quietgrid"}}</script></head><body>
+<header class="site"><div class="in"><a class="logo" href="../index.html">Quietgrid</a><nav><a href="../pto-leave-tracker.html">PTO Tracker</a><a href="../reading-tracker.html">Reading Tracker</a><a href="../blog/index.html">Guides</a></nav></div></header>
+<main><article><p class='note'>Guide · updated 2026-10-10</p><h1>How to count working days between two dates, excluding holidays (Excel & Google Sheets)</h1>
+<p class="lead">To count leave days, project days or delivery times, you need <b>working days</b>, not calendar days. Excel and Google Sheets both have a built-in function for this.</p>
+<h2>The basic formula: NETWORKDAYS</h2><pre>=NETWORKDAYS(start_date, end_date, [holidays])</pre>
+<ul><li>It counts <b>Monday to Friday</b> and <b>includes</b> both the start and end dates.</li><li><code>holidays</code> is optional: a range of cells holding real dates to skip.</li></ul>
+<p><b>Example:</b> Monday 5 October 2026 to Friday 16 October 2026:</p>
+<table><tr><th>Formula</th><th>Result</th></tr><tr><td><code>=NETWORKDAYS(DATE(2026,10,5), DATE(2026,10,16))</code></td><td>10</td></tr>
+<tr><td>Same range, with 12 Oct 2026 in the holiday list: <code>=NETWORKDAYS(A2, B2, Holidays!A2:A30)</code></td><td>9</td></tr></table>
+<h2>Different weekends: NETWORKDAYS.INTL</h2><p>If your weekend isn't Saturday and Sunday, use:</p><pre>=NETWORKDAYS.INTL(start_date, end_date, weekend, [holidays])</pre>
+<table><tr><th>weekend argument</th><th>Days off</th></tr><tr><td>1 (default)</td><td>Saturday + Sunday</td></tr><tr><td>7</td><td>Friday + Saturday</td></tr>
+<tr><td>11</td><td>Sunday only</td></tr><tr><td>"0000011"</td><td>Custom string, Monday→Sunday, 1 = day off (here Sat + Sun)</td></tr></table>
+<p>The string version is handy for unusual schedules. For example, <code>"0000111"</code> means Friday, Saturday and Sunday off.</p>
+<h2>Half days</h2><p>Neither function knows about half days. A simple pattern uses a "Half day?" column:</p><pre>=IF(C2="Yes", 0.5, NETWORKDAYS(A2, B2, Holidays))</pre>
+<h2>When is someone back? WORKDAY</h2><p>To find the next working day after a leave ends:</p><pre>=WORKDAY(end_date, 1, Holidays)</pre>
+<p>Example: leave ending Friday 3 July 2026 → returns Monday 6 July 2026.</p>
+<h2>Common mistakes</h2><ul><li><b>Dates stored as text.</b> If <code>=ISNUMBER(A2)</code> returns FALSE, the cell isn't a real date. Re-enter it, or use DATEVALUE.</li>
+<li><b>Holiday list with text or the wrong year.</b> Holidays must be real dates in the right year.</li>
+<li><b>Off-by-one.</b> NETWORKDAYS counts both ends. Monday to Monday is 6 days, not 5.</li><li><b>Start after end</b> gives a negative number. Add a check: <code>=IF(B2&lt;A2,"Check dates",NETWORKDAYS(A2,B2))</code>.</li></ul>
+<div class="card"><h3>Tracking time off?</h3><p>The <a href="../pto-leave-tracker.html">PTO &amp; Leave Tracker</a> uses exactly this logic, with your own holiday list, half days and a monthly team calendar.</p></div></article></main>
+<footer><div class="in">© 2026 Quietgrid · Spreadsheet templates for Excel &amp; Google Sheets · <a href="../about.html">About</a> · <a href="../legal.html">Legal notice &amp; privacy</a><br>
+Products are designed with the help of AI tools and tested before release. Payments are processed by our reseller (Gumroad), who handles sales tax/VAT.</div></footer></body></html>
