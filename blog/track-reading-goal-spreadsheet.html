@@ -1,0 +1,25 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to track a reading goal in a spreadsheet (formulas included) | Quietgrid</title><meta name="description" content="Set up a reading log in Google Sheets or Excel: count books finished this year, check whether you&#x27;re on pace for your goal, and calculate pages per day and average rating."><link rel="canonical" href="https://ticoq971.github.io/quietgrid-templates/blog/track-reading-goal-spreadsheet.html">
+<meta property="og:title" content="How to track a reading goal in a spreadsheet (formulas included) | Quietgrid"><meta property="og:description" content="Set up a reading log in Google Sheets or Excel: count books finished this year, check whether you&#x27;re on pace for your goal, and calculate pages per day and average rating."><meta property="og:image" content="https://ticoq971.github.io/quietgrid-templates/assets/img/pto-01-cover.jpg">
+<meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image"><link rel="stylesheet" href="../assets/style.css"><script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "How to track a reading goal in a spreadsheet (formulas included)", "description": "Set up a reading log in Google Sheets or Excel: count books finished this year, check whether you're on pace for your goal, and calculate pages per day and average rating.", "datePublished": "2026-10-10", "author": {"@type": "Organization", "name": "Quietgrid"}, "publisher": {"@type": "Organization", "name": "Quietgrid"}}</script></head><body>
+<header class="site"><div class="in"><a class="logo" href="../index.html">Quietgrid</a><nav><a href="../pto-leave-tracker.html">PTO Tracker</a><a href="../reading-tracker.html">Reading Tracker</a><a href="../blog/index.html">Guides</a></nav></div></header>
+<main><article><p class='note'>Guide · updated 2026-10-10</p><h1>How to track a reading goal in a spreadsheet (formulas included)</h1>
+<p class="lead">A reading log in a spreadsheet is private, flexible and yours forever. Here are the formulas to turn a simple list of books into real reading stats.</p>
+<h2>1. The columns you need</h2><table><tr><th>Column</th><th>Example</th></tr><tr><td>A: Title</td><td>The Lantern Atlas</td></tr><tr><td>B: Pages</td><td>512</td></tr>
+<tr><td>C: Status</td><td>Finished / Reading / DNF</td></tr><tr><td>D: Started</td><td>2026-10-03</td></tr><tr><td>E: Finished</td><td>2026-10-20</td></tr><tr><td>F: Rating</td><td>4.5</td></tr></table>
+<p>Use a dropdown (Data → Data validation) for Status, so that "finished" and "Finished " (with a trailing space) don't get counted as different values.</p>
+<h2>2. Books finished this year</h2><pre>=COUNTIFS(C:C,"Finished", E:E,"&gt;="&amp;DATE(2026,1,1), E:E,"&lt;="&amp;DATE(2026,12,31))</pre>
+<p>Counting by <b>finish date</b> means a book started in December and finished in January counts toward the new year, which is how most reading challenges work.</p>
+<h2>3. Pages read this year</h2><pre>=SUMIFS(B:B, C:C,"Finished", E:E,"&gt;="&amp;DATE(2026,1,1), E:E,"&lt;="&amp;DATE(2026,12,31))</pre>
+<h2>4. Am I on pace?</h2><p>If you read evenly all year, the number of books you "should" have finished by today is:</p><pre>=Goal * (TODAY() - DATE(2026,1,1) + 1) / 365</pre>
+<p><b>Example:</b> with a goal of 30 books, on 10 October (day 283 of the year): 30 × 283 ÷ 365 = <b>23.3 books</b>. If you've finished 23, you're 0.3 behind, which is basically on track.</p>
+<p>Books per month needed to finish on time:</p><pre>=MAX(0, Goal - Finished) / (13 - MONTH(TODAY()))</pre><p>(this counts the current month as one of the months left).</p>
+<h2>5. Speed and ratings</h2><pre>Days to read:   =E2 - D2 + 1
+Pages per day:  =ROUND(B2 / (E2 - D2 + 1), 0)
+Average rating: =AVERAGEIFS(F:F, C:C,"Finished", E:E,"&gt;="&amp;DATE(2026,1,1))</pre>
+<h2>6. Show stars</h2><pre>=REPT("★", INT(F2)) &amp; IF(F2-INT(F2)&gt;=0.5, "½", "") &amp; REPT("☆", 5 - ROUNDUP(F2, 0))</pre><p>A 4.5 rating shows as ★★★★½.</p>
+<h2>7. A progress bar without charts</h2><pre>=REPT("█", ROUND(Finished/Goal*20, 0)) &amp; REPT("░", 20 - ROUND(Finished/Goal*20, 0))</pre>
+<p>Wrap the parts in MIN/MAX if you might go over 100% of your goal. That's a nice problem to have.</p>
+<div class="card"><h3>Want it ready-made?</h3><p>The <a href="../reading-tracker.html">Reading Tracker</a> has all of this already built: a dashboard, top genres, your highest-rated books, a monthly review with a goal-pace chart, and a TBR list.</p></div></article></main>
+<footer><div class="in">© 2026 Quietgrid · Spreadsheet templates for Excel &amp; Google Sheets · <a href="../about.html">About</a> · <a href="../legal.html">Legal notice &amp; privacy</a><br>
+Products are designed with the help of AI tools and tested before release. Payments are processed by our reseller (Gumroad), who handles sales tax/VAT.</div></footer></body></html>
